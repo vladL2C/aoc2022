@@ -30,33 +30,45 @@ var ScoresRigged = map[string]int{
 	"B Z": 9,
 }
 
+type RockPaperScissors struct {
+	Rounds      []string
+	Board       map[string]int
+	RiggedBoard map[string]int
+}
+
+func (game *RockPaperScissors) Score() int {
+	points := 0
+
+	for _, g := range game.Rounds {
+		score := game.Board[g]
+		points += score
+	}
+
+	return points
+}
+
+func (game *RockPaperScissors) RiggedScore() int {
+	points := 0
+
+	for _, g := range game.Rounds {
+		score := game.RiggedBoard[g]
+		points += score
+	}
+
+	return points
+}
+
 func main() {
 	input := helpers.GetInput("./day2/input.txt")
 
 	games := strings.Split(input, "\n")
 
-	Part1(games)
-	Part2(games)
-}
-
-func Part1(games []string) {
-	points := 0
-
-	for _, g := range games {
-		score := Scores[g]
-		points += score
+	gamer := RockPaperScissors{
+		Rounds:      games,
+		Board:       Scores,
+		RiggedBoard: ScoresRigged,
 	}
 
-	fmt.Println(points)
-}
-
-func Part2(games []string) {
-	points := 0
-
-	for _, g := range games {
-		score := ScoresRigged[g]
-		points += score
-	}
-
-	fmt.Println(points)
+	fmt.Println("Part 1:", gamer.Score())
+	fmt.Println("Part 2:", gamer.RiggedScore())
 }

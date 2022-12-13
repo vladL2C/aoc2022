@@ -9,37 +9,31 @@ import (
 	"aoc2022/helpers"
 )
 
-func main() {
-	content := helpers.GetInput("./day1/input.txt")
-
-	calorieGroups := strings.Split(content, "\n\n")
-
-	eachGroupTotal := []int{}
-
-	for _, group := range calorieGroups {
-		group := strings.Split(group, "\n")
-		sum := 0
-		for _, calorie := range group {
-			i, _ := strconv.Atoi(calorie)
-			sum += i
-		}
-
-		eachGroupTotal = append(eachGroupTotal, sum)
-	}
-
-	sort.Slice(eachGroupTotal, func(i, j int) bool {
-		return eachGroupTotal[i] > eachGroupTotal[j]
-	})
-
-	part1(eachGroupTotal)
-	part2(eachGroupTotal, 3)
+type Calories struct {
+	Groups []string
 }
 
-func part1(groupTotals []int) {
+func (c *Calories) Group() []int {
+	totals := []int{}
+
+	for _, group := range c.Groups {
+		calories := strings.Split(group, "\n")
+		sum := 0
+		for _, calorie := range calories {
+			cal, _ := strconv.Atoi(calorie)
+			sum += cal
+		}
+		totals = append(totals, sum)
+	}
+
+	return totals
+}
+
+func Highest(groupTotals []int) {
 	fmt.Println("PART 1 ANSWER:", groupTotals[0])
 }
 
-func part2(groupTotals []int, top int) {
+func Top(groupTotals []int, top int) {
 	result := 0
 
 	for i := 0; i < top; i++ {
@@ -47,4 +41,23 @@ func part2(groupTotals []int, top int) {
 	}
 
 	fmt.Println("PART 2 ANSWER:", result)
+}
+
+func main() {
+	content := helpers.GetInput("./day1/input.txt")
+
+	calorieGroups := strings.Split(content, "\n\n")
+
+	c := Calories{
+		Groups: calorieGroups,
+	}
+
+	totals := c.Group()
+
+	sort.Slice(totals, func(i, j int) bool {
+		return totals[i] > totals[j]
+	})
+
+	Highest(totals)
+	Top(totals, 3)
 }
