@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	raw := helpers.GetInput("./day8/sample.txt")
+	raw := helpers.GetInput("./day8/input.txt")
 
 	parse := strings.Split(raw, "\n")
 
@@ -21,98 +21,117 @@ func main() {
 
 	visible := 0
 
+	max := 0
+
+	// part 1
 	for row := 1; row < len(grid)-1; row++ {
 
 		for col := 1; col < len(grid)-1; col++ {
 			tree, _ := strconv.Atoi(string(grid[row][col]))
 
-			if CheckRight(tree, col+1, grid[row]) {
+			if isCheckRight(tree, col+1, grid[row]) {
 				visible += 1
 				continue
 			}
 
-			if CheckLeft(tree, col-1, grid[row]) {
+			if isCheckLeft(tree, col-1, grid[row]) {
 				visible += 1
 				continue
 			}
 
-			if CheckUp(tree, row, col, grid) {
+			if isCheckUp(tree, row, col, grid) {
 				visible += 1
 				continue
 			}
 
-			if CheckDown(tree, row, col, grid) {
+			if isCheckDown(tree, row, col, grid) {
 				visible += 1
 				continue
 			}
-
 		}
-
 	}
 
-	fmt.Println(totalEdges + visible)
+	// part 2
+	for row := 1; row < len(grid)-1; row++ {
+
+		for col := 1; col < len(grid)-1; col++ {
+			tree, _ := strconv.Atoi(string(grid[row][col]))
+
+			sum := CheckRight(tree, col+1, grid[row]) * CheckLeft(tree, col-1, grid[row]) * CheckUp(tree, row, col, grid) * CheckDown(tree, row, col, grid)
+
+			if max < sum {
+				max = sum
+			}
+		}
+	}
+
+	fmt.Println("PART 1", totalEdges+visible)
+	fmt.Println("Part 2", max)
 
 }
 
-func CheckDown(currentTree, row, col int, grid []string) bool {
-	isVisible := false
+func CheckDown(currentTree, row, col int, grid []string) int {
+	vis := 0
 
 	for i := row + 1; i < len(grid); i++ {
 		nextTree, _ := strconv.Atoi(string(grid[i][col]))
 		if currentTree > nextTree {
-			isVisible = true
+			vis += 1
 		} else {
-			return false
+			vis += 1
+			break
 		}
 	}
 
-	return isVisible
-
+	return vis
 }
 
-func CheckUp(currentTree, row, col int, grid []string) bool {
-	isVisible := false
+func CheckUp(currentTree, row, col int, grid []string) int {
+	vis := 0
 
 	for i := row - 1; i >= 0; i-- {
 		nextTree, _ := strconv.Atoi(string(grid[i][col]))
 		if currentTree > nextTree {
-			isVisible = true
+			vis += 1
 		} else {
-			return false
+			vis += 1
+			break
 		}
 	}
 
-	return isVisible
+	return vis
 }
 
-func CheckLeft(currentTree, row int, grid string) bool {
-	isVisible := false
+func CheckLeft(currentTree, row int, grid string) int {
+	vis := 0
 
 	for i := row; i >= 0; i-- {
 		nextTree, _ := strconv.Atoi(string(grid[i]))
 		if currentTree > nextTree {
-			isVisible = true
+			vis += 1
 		} else {
-			return false
+			vis += 1
+			break
 		}
 	}
 
-	return isVisible
+	return vis
 }
 
-func CheckRight(currentTree, row int, grid string) bool {
-	isVisible := false
+func CheckRight(currentTree, row int, grid string) int {
+	vis := 0
 
 	for i := row; i < len(grid); i++ {
 		nextTree, _ := strconv.Atoi(string(grid[i]))
 		if currentTree > nextTree {
-			isVisible = true
+			vis += 1
 		} else {
-			return false
+			vis += 1
+			break
 		}
 	}
 
-	return isVisible
+	return vis
 }
 
 func GetEdgeCount(edges []string) int {
@@ -136,4 +155,65 @@ func GetRemainingEdges(trees []string) []string {
 	}
 
 	return edges
+}
+
+func isCheckDown(currentTree, row, col int, grid []string) bool {
+	isVisible := false
+
+	for i := row + 1; i < len(grid); i++ {
+		nextTree, _ := strconv.Atoi(string(grid[i][col]))
+		if currentTree > nextTree {
+			isVisible = true
+		} else {
+			return false
+		}
+	}
+
+	return isVisible
+
+}
+
+func isCheckUp(currentTree, row, col int, grid []string) bool {
+	isVisible := false
+
+	for i := row - 1; i >= 0; i-- {
+		nextTree, _ := strconv.Atoi(string(grid[i][col]))
+		if currentTree > nextTree {
+			isVisible = true
+		} else {
+			return false
+		}
+	}
+
+	return isVisible
+}
+
+func isCheckLeft(currentTree, row int, grid string) bool {
+	isVisible := false
+
+	for i := row; i >= 0; i-- {
+		nextTree, _ := strconv.Atoi(string(grid[i]))
+		if currentTree > nextTree {
+			isVisible = true
+		} else {
+			return false
+		}
+	}
+
+	return isVisible
+}
+
+func isCheckRight(currentTree, row int, grid string) bool {
+	isVisible := false
+
+	for i := row; i < len(grid); i++ {
+		nextTree, _ := strconv.Atoi(string(grid[i]))
+		if currentTree > nextTree {
+			isVisible = true
+		} else {
+			return false
+		}
+	}
+
+	return isVisible
 }
