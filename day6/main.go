@@ -17,11 +17,11 @@ func NewStreamer(data string) Stream {
 
 func main() {
 	stream := NewStreamer(helpers.GetInput("./day6/input.txt"))
-	stream.FindBy(3)
-	stream.FindBy(13)
+	stream.FindUniqueBy(3)
+	stream.FindUniqueBy(13)
 }
 
-func (s Stream) FindBy(n int) {
+func (s Stream) FindUniqueBy(n int) {
 	for i := n; i < len(s.Data); i++ {
 		section := s.Data[i-n : i+1]
 
