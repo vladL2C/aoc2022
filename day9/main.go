@@ -13,7 +13,7 @@ type coord struct {
 }
 
 func main() {
-	raw := helpers.GetInput("./day9/sample.txt")
+	raw := helpers.GetInput("./day9/input.txt")
 
 	data := strings.Split(raw, "\n")
 
