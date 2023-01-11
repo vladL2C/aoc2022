@@ -81,6 +81,7 @@ func Part2() {
 	}
 	fmt.Println("PART 2:", len(visibility))
 }
+
 func Touching(head, tail coord) bool {
 	diffX := math.Abs(float64(tail.x - head.x))
 	diffY := math.Abs(float64(tail.y - head.y))
