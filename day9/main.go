@@ -3,6 +3,7 @@ package main
 import (
 	"aoc2022/helpers"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -29,21 +30,41 @@ func main() {
 
 		for i := 0; i < moves; i++ {
 			head = MoveHead(head, direction)
-			tail = MoveTail(tail, head)
+
+			if !Touching(head, tail) {
+				tail = MoveTailToHead(head, tail)
+				visibility[tail] = struct{}{}
+			}
+
 		}
 
 	}
 
-	fmt.Printf("%#v", head)
 	fmt.Println(len(visibility))
+
 }
 
-func MoveTail(tail, head coord) coord {
-	diffX := tail.x - head.x
-	diffY := tail.y - head.y
+func Touching(head, tail coord) bool {
+	diffX := math.Abs(float64(tail.x - head.x))
+	diffY := math.Abs(float64(tail.y - head.y))
 
-	fmt.Println(diffX, diffY)
-	return tail
+	return diffX <= 1 && diffY <= 1
+}
+
+func MoveTailToHead(head, tail coord) coord {
+	x, y := head.x-tail.x, head.y-tail.y
+	if x > 0 {
+		x = 1
+	} else if x < 0 {
+		x = -1
+	}
+	if y > 0 {
+		y = 1
+	} else if y < 0 {
+		y = -1
+	}
+
+	return coord{tail.x + x, tail.y + y}
 }
 
 func MoveHead(head coord, direction string) coord {
